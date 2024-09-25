@@ -1,45 +1,139 @@
-import React from 'react';
-import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-react";
+import React, { useState, useEffect } from 'react';
+import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from "@clerk/clerk-react";
 import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from 'react-redux';
+import { userRole } from '../../redux/userReducer/actions';
+import axios from 'axios';
+import { host } from '../../host';
 
 const navData = [
     {
         href: '/',
-        title: "Upload Fonts"
+        title: "Customers",
     },
     {
-        href: '/create_group',
-        title: "Create Group"
+        href: '/products',
+        title: "Products",
+        isCustomer: true
     },
     {
-        href: '/font_groups',
-        title: "Font Groups"
+        href: '/analysis',
+        title: "Analysis",
+    },
+    {
+        href: '/order',
+        title: "Order List",
+        isCustomer: true
     },
 ];
 
 const Navbar = () => {
+    const [isNavOpen, setIsNavOpen] = useState(false); // State for controlling nav visibility
+    const role = useSelector((state) => state.userRole);
+    const dispatch = useDispatch();
+    const { user } = useUser();
+
+    useEffect(() => {
+        if (!!user?.id) {
+            axios.get(`${host}/api/user/getUser`, {
+                params: { id: user?.id },
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+                .then(response => {
+                    dispatch(userRole(response.data.role));
+                })
+                .catch(error => {
+                    console.error('Error fetching user:', error.response || error.message);
+                });
+        }
+    }, [user]);
+
+
     return (
-        <nav className="w-full bg-gradient-to-r from-sky-600 to-indigo-600 h-20 text-white shadow-lg flex justify-between items-center px-6">
-            <span className='text-3xl font-bold '>AI Feedback App</span>
-            <ul className="flex items-center  text-lg font-semibold gap-8 h-full">
-                {navData.map((item, index) => (
-                    <Link to={item.href} key={index}>
-                        <li className="transition-transform transform hover:text-yellow-400 cursor-pointer p-2 rounded-md hover:bg-white hover:bg-opacity-10">
-                            {item.title}
-                        </li>
-                    </Link>
-                ))}
-            </ul>
-            <button className='mr-5'>
-                <SignedOut>
-                    <SignInButton className="bg-yellow-400 text-black px-4 py-2 rounded-md transition-all hover:bg-yellow-300" />
-                </SignedOut>
-                <SignedIn>
-                    <UserButton className="bg-yellow-400 text-black px-4 py-2 rounded-md transition-all hover:bg-yellow-300 " />
-                </SignedIn>
-            </button>
+        <nav className="bg-white w-full border-b border-gray-200 shadow-sm">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="flex justify-between items-center h-16">
+                    <div className="flex items-center">
+                        <Link to="/" className="text-2xl font-semibold text-gray-800">
+                            AI Feedback App
+                        </Link>
+                    </div>
+
+                    <div className="hidden md:flex space-x-8">
+                        {role && (
+                            navData
+                                .filter(item => {
+                                    // Show all items for admin role
+                                    if (role === 'admin') {
+                                        return true;
+                                    }
+                                    // For customer role, only show items where isCustomer is true
+                                    return item.isCustomer === true && role === 'customer';
+                                })
+                                .map((item, index) => (
+                                    <Link
+                                        key={index}
+                                        to={item.href}
+                                        className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition duration-150 ease-in-out"
+                                    >
+                                        {item.title}
+                                    </Link>
+                                ))
+                        )}
+
+                    </div>
+
+                    {/* Authentication Buttons */}
+                    <div className="flex items-center">
+                        <SignedOut>
+                            <SignInButton className="text-sm text-white bg-blue-600 px-4 py-2 rounded-md hover:bg-blue-500 transition-all" />
+                        </SignedOut>
+                        <SignedIn>
+                            <UserButton className="text-sm text-white bg-blue-600 px-4 py-2 rounded-md hover:bg-blue-500 transition-all" />
+                        </SignedIn>
+
+                        {
+                            role && (<div className="md:hidden mx-2 my-2">
+                                <button
+                                    onClick={() => setIsNavOpen(!isNavOpen)}
+                                    type="button"
+                                    className="text-gray-500 hover:text-gray-700 focus:outline-none focus:text-gray-700"
+                                >
+                                    <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                                    </svg>
+                                </button>
+                            </div>)
+                        }
+                    </div>
+                </div>
+            </div>
+
+            {/* Mobile Menu - Only visible on smaller screens */}
+            {isNavOpen && (
+                <div className="md:hidden">
+                    <div className="px-2 sm:px-3">
+                        {role && (navData
+                            .filter(item => {
+                                if (role === 'admin') return true;
+                                return item.title !== 'Admin'; // Adjust visibility based on role
+                            })
+                            .map((item, index) => (
+                                <Link
+                                    key={index}
+                                    to={item.href}
+                                    className="block text-right text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-base font-medium transition duration-150 ease-in-out"
+                                >
+                                    {item.title}
+                                </Link>
+                            )))}
+                    </div>
+                </div>
+            )}
         </nav>
     );
-}
+};
 
 export default Navbar;
