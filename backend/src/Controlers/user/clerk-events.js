@@ -1,4 +1,4 @@
-const USER = require('../models/user_model');
+const USER = require('../../models/user_model');
 
 exports.webhook = async (req, res) => {
     const user = req.body;

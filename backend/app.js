@@ -6,7 +6,8 @@ const server = http.createServer(app)
 const cors = require('cors')
 const compression = require("compression")
 
-const userRouter= require('./router')
+const userRouter= require('./src/router/userRouter')
+const productRouter= require('./src/router/productRoute')
 
 require('dotenv').config()
 //mongodb Database
@@ -19,6 +20,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/api/user',userRouter)
+app.use('/api/product',productRouter)
 
 server.listen(process.env.PORT, () => {
     console.log(`Listening to the port : ${process.env.PORT} : ${process.pid} `)
