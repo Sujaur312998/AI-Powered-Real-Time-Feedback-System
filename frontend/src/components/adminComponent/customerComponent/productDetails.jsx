@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 
 const ProductDetails = () => {
   const { email, fullName, userID } = useSelector((state) => state);
-  const { id } = useParams(); // Retrieve the dynamic 'id' from the URL
+  const { p_id, o_id } = useParams(); // Retrieve the dynamic 'id' from the URL
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showFeedbackForm, setShowFeedbackForm] = useState(false);
@@ -16,9 +16,18 @@ const ProductDetails = () => {
   const [orderSubmitted, setOrderSubmitted] = useState(false);
   const [orderDetails, setOrderDetails] = useState(null);
 
+
+  useEffect(()=>{
+    if(o_id){
+      setOrderSubmitted(true)
+      setShowFeedbackForm(true);
+    }
+  },[o_id])
+
+
   useEffect(() => {
     // Fetch product details by ID
-    axios.get(`${host}/api/product/productDetails`, { params: { _id: id } })
+    axios.get(`${host}/api/product/productDetails`, { params: { _id: p_id } })
       .then(response => {
         setLoading(false);
         setProduct(response.data.message);
@@ -27,12 +36,12 @@ const ProductDetails = () => {
         console.log(error);
         setLoading(false);
       });
-  }, [id]);
+  }, [p_id]);
 
   const handleOrderClick = () => {
     axios.post(`${host}/api/order/addOrder`, {
       userID: userID,
-      productId: id
+      productId: p_id
     }).then(res => {
       setOrderDetails(res.data.message);
       setOrderSubmitted(true)
@@ -67,13 +76,14 @@ const ProductDetails = () => {
       {!orderSubmitted && (
         <button
           onClick={handleOrderClick}
+          disabled={!!o_id}
           className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-200"
         >
           Order Now
         </button>
       )}
 
-      {orderSubmitted && <p className="text-green-500 font-semibold">Order has been successfully placed. Thank you for your purchase! </p>}
+      {orderSubmitted && !o_id && <p className="text-green-500 font-semibold">Order has been successfully placed. Thank you for your purchase! </p>}
       {feedbackSubmitted && <p className="text-green-500 font-semibold">Thank you for your feedback.</p>}
 
       {showFeedbackForm && (

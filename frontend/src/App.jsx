@@ -5,14 +5,17 @@ import Navbar from './components/NavBar/';
 import Home from './components/Home/';
 import Product from './components/adminComponent/customerComponent/Product';
 import ProductDetails from './components/adminComponent/customerComponent/productDetails'
+import Order from './components/adminComponent/customerComponent/Order';
+
 
 export default function App() {
   const routes = [
     { path: '/', element: <Home /> },
     { path: '/customer', element: <Customer /> },
     { path: '/products', element: <Product /> },
-    { path: '/productdetails/:id', element: <ProductDetails /> },
-
+    { path: '/productdetails/:p_id', element: <ProductDetails /> },
+    { path: '/productdetails/:p_id/:o_id', element: <ProductDetails /> },
+    { path: '/order', element: <Order /> },
     { path: '*', element: <NotFoundPage /> },
   ];
 
