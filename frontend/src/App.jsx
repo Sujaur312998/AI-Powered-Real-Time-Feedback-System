@@ -1,15 +1,18 @@
-import Navbar from './components/navbar/navbar'
 import { useRoutes } from 'react-router-dom';
-import NotFoundPage from './components/NotFoundPage/NotFoundPage'
+import NotFoundPage from './components/NotFoundPage'
 import Customer from './components/adminComponent/customer'
-
+import Navbar from './components/NavBar/';
+import Home from './components/Home/';
+import Product from './components/adminComponent/customerComponent/Product';
+import ProductDetails from './components/adminComponent/customerComponent/productDetails'
 
 export default function App() {
   const routes = [
-    { path: '/', element: <Customer /> },
-    // { path: '/create_group', element:<CreateGroup header='Create Font Group'/>  },
-    // { path: '/update_group', element:<CreateGroup header='Update Font Group'/>  },
-    // { path: '/font_groups', element: <FontGroup /> },
+    { path: '/', element: <Home /> },
+    { path: '/customer', element: <Customer /> },
+    { path: '/products', element: <Product /> },
+    { path: '/productdetails/:id', element: <ProductDetails /> },
+
     { path: '*', element: <NotFoundPage /> },
   ];
 

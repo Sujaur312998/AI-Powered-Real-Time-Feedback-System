@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from "@clerk/clerk-react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
-import { userRole } from '../../redux/userReducer/actions';
+import { userRole } from '../redux/userReducer/actions';
 import axios from 'axios';
-import { host } from '../../host';
+import { host } from '../host';
 
 const navData = [
     {
-        href: '/',
+        href: '/customer',
         title: "Customers",
     },
     {
@@ -42,7 +42,7 @@ const Navbar = () => {
                 }
             })
                 .then(response => {
-                    dispatch(userRole(response.data.role));
+                    dispatch(userRole({ role: response.data.role, userID: user?.id }));
                 })
                 .catch(error => {
                     console.error('Error fetching user:', error.response || error.message);
@@ -53,7 +53,7 @@ const Navbar = () => {
 
     return (
         <nav className="bg-white w-full border-b border-gray-200 shadow-sm">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-screen-2xl  mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center h-16">
                     <div className="flex items-center">
                         <Link to="/" className="text-2xl font-semibold text-gray-800">
@@ -118,7 +118,7 @@ const Navbar = () => {
                         {role && (navData
                             .filter(item => {
                                 if (role === 'admin') return true;
-                                return item.title !== 'Admin'; // Adjust visibility based on role
+                                return item.isCustomer === true && role === 'customer';
                             })
                             .map((item, index) => (
                                 <Link
