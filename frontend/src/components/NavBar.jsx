@@ -42,7 +42,14 @@ const Navbar = () => {
                 }
             })
                 .then(response => {
-                    dispatch(userRole({ role: response.data.role, userID: user?.id }));
+                    dispatch(
+                        userRole({
+                            role: response.data.role,
+                            userID: user?.id,
+                            fullName: user.fullName,
+                            email: user.emailAddresses[0].emailAddress
+                        })
+                    );
                 })
                 .catch(error => {
                     console.error('Error fetching user:', error.response || error.message);

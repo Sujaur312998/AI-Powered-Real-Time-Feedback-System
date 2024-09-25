@@ -11,7 +11,9 @@ const rootReducer = (state = initialState, action) => {
       return {
         ...state,
         userRole: action.payload.role,
-        userID: action.payload.userID
+        userID: action.payload.userID,
+        fullName: action.payload.fullName,
+        email: action.payload.email,
       };
     default:
       return state;

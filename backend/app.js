@@ -8,6 +8,7 @@ const compression = require("compression")
 
 const userRouter= require('./src/router/userRouter')
 const productRouter= require('./src/router/productRoute')
+const orderRouter= require('./src/router/orderRoute')
 
 require('dotenv').config()
 //mongodb Database
@@ -21,6 +22,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use('/api/user',userRouter)
 app.use('/api/product',productRouter)
+app.use('/api/order',orderRouter)
 
 server.listen(process.env.PORT, () => {
     console.log(`Listening to the port : ${process.env.PORT} : ${process.pid} `)
