@@ -6,7 +6,7 @@ exports.getuser = async (req, res) => {
         const { id } = req.query;
 
         // Find the user by 'id'
-        const _user = await USER.findOne({ id },'role');
+        const _user = await USER.findOne({ id });
 
         // Check if the user is found
         if (!_user) {

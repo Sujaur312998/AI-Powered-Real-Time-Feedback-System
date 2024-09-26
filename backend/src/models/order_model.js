@@ -14,6 +14,10 @@ const ORDER = new mongoose.Schema(
         feedback:{
             type: String,
             trim: true,
+        },
+        review:{
+            type: String,
+            trim: true,
         }
     },
     {

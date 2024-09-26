@@ -6,7 +6,7 @@ import Loader from '../../Loader';
 import { useSelector } from 'react-redux';
 
 const ProductDetails = () => {
-  const { email, fullName, userID } = useSelector((state) => state);
+  const { email, fullName, userID, userRole } = useSelector((state) => state);
   const { p_id, o_id } = useParams(); // Retrieve the dynamic 'id' from the URL
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -14,15 +14,14 @@ const ProductDetails = () => {
   const [feedback, setFeedback] = useState('');
   const [feedbackSubmitted, setFeedbackSubmitted] = useState(false);
   const [orderSubmitted, setOrderSubmitted] = useState(false);
-  const [orderDetails, setOrderDetails] = useState(null);
+  const [orderDetails, setOrderDetails] = useState({});
 
-
-  useEffect(()=>{
-    if(o_id){
+  useEffect(() => {
+    if (o_id) {
       setOrderSubmitted(true)
       setShowFeedbackForm(true);
     }
-  },[o_id])
+  }, [o_id])
 
 
   useEffect(() => {
@@ -43,6 +42,7 @@ const ProductDetails = () => {
       userID: userID,
       productId: p_id
     }).then(res => {
+      // console.log(res.data.message);
       setOrderDetails(res.data.message);
       setOrderSubmitted(true)
       setShowFeedbackForm(true);
@@ -54,9 +54,25 @@ const ProductDetails = () => {
   const handleSubmitFeedback = (e) => {
     e.preventDefault();
     // Handle feedback submission, e.g., send it to a server or just log it for now
-    console.log({ _id: orderDetails._id, feedback });
-    setFeedbackSubmitted(true);
-    setShowFeedbackForm(false);
+    const data = {
+      orderId: o_id || orderDetails._id,
+      prompt: `${feedback}. `
+    }
+    axios.post(`${host}/api/gemini`, { prompt: data.prompt })
+      .then(res => {
+        data.review = res.data.result
+        axios.put(`${host}/api/order/updateOrder`, data)
+          .then(res => {
+            setOrderDetails(res.data.message);
+            setFeedbackSubmitted(true);
+            setShowFeedbackForm(false);
+          })
+      })
+      .catch(error => {
+        console.log(error);
+
+      })
+
   };
 
   if (loading) {
@@ -68,7 +84,7 @@ const ProductDetails = () => {
   }
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto py-4 px-8">
       <h1 className="text-2xl font-bold mb-4">{product.productName}</h1>
       <p className="mb-2 text-sm text-gray-600">{product.description}</p>
       <p className="text-lg mb-4">Price: {product.price} ₹</p>
@@ -119,12 +135,18 @@ const ProductDetails = () => {
                 className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-black"
               />
             </div>
-            <button
-              type="submit"
-              className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition duration-200"
-            >
-              Submit Feedback
-            </button>
+            {
+              userRole && userRole !== 'admin' && (
+                <button
+                  type="submit"
+                  className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition duration-200"
+                >
+                  Submit Feedback
+                </button>
+              )
+            }
+
+
           </form>
         </div>
       )}
