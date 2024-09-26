@@ -20,6 +20,17 @@ const ProductDetails = () => {
     if (o_id) {
       setOrderSubmitted(true)
       setShowFeedbackForm(true);
+      axios.get(`${host}/api/order/getOrderDetails`, {
+        params: { o_id: o_id }
+      })
+        .then(res => {
+          console.log(res.data.message);
+          
+          setFeedback(res.data.message.feedback);
+        })
+        .catch(err => {
+          console.log(err);
+        })
     }
   }, [o_id])
 
@@ -30,6 +41,7 @@ const ProductDetails = () => {
       .then(response => {
         setLoading(false);
         setProduct(response.data.message);
+
       })
       .catch(error => {
         console.log(error);
@@ -70,7 +82,6 @@ const ProductDetails = () => {
       })
       .catch(error => {
         console.log(error);
-
       })
 
   };
@@ -102,54 +113,56 @@ const ProductDetails = () => {
       {orderSubmitted && !o_id && <p className="text-green-500 font-semibold">Order has been successfully placed. Thank you for your purchase! </p>}
       {feedbackSubmitted && <p className="text-green-500 font-semibold">Thank you for your feedback.</p>}
 
-      {showFeedbackForm && (
-        <div className="mt-6 bg-gray-50 p-4 rounded-md shadow-md">
-          <h2 className="text-xl font-semibold mb-4">Feedback - {product.productName}</h2>
-          <form onSubmit={handleSubmitFeedback}>
-            <div className="mb-4">
-              <input
-                type="text"
-                value={fullName}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Your Name"
-                required
-                className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-black"
-              />
-            </div>
-            <div className="mb-4">
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Your Email"
-                required
-                className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-black"
-              />
-            </div>
-            <div className="mb-4">
-              <textarea
-                value={feedback}
-                onChange={(e) => setFeedback(e.target.value)}
-                placeholder="Write your feedback here..."
-                required
-                className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-black"
-              />
-            </div>
-            {
-              userRole && userRole !== 'admin' && (
-                <button
-                  type="submit"
-                  className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition duration-200"
-                >
-                  Submit Feedback
-                </button>
-              )
-            }
-
-
-          </form>
-        </div>
-      )}
+      {
+        showFeedbackForm && (
+          <div className="mt-6 bg-gray-50 p-4 rounded-md shadow-md">
+            <h2 className="text-xl font-semibold mb-4">Feedback - {product.productName}</h2>
+            <form onSubmit={handleSubmitFeedback}>
+              <div className="mb-4">
+                <input
+                  type="text"
+                  value={fullName}
+                  disabled
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Your Name"
+                  required
+                  className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-black"
+                />
+              </div>
+              <div className="mb-4">
+                <input
+                  type="email"
+                  value={email}
+                  disabled
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Your Email"
+                  required
+                  className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-black"
+                />
+              </div>
+              <div className="mb-4">
+                <textarea
+                  value={feedback}
+                  onChange={(e) => setFeedback(e.target.value)}
+                  placeholder="Write your feedback here..."
+                  required
+                  disabled={userRole === 'admin'}
+                  className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-black"
+                />
+              </div>
+              {
+                userRole && userRole !== 'admin' && (
+                  <button
+                    type="submit"
+                    className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition duration-200"
+                  >
+                    Submit Feedback
+                  </button>
+                )
+              }
+            </form>
+          </div>
+        )}
     </div>
   );
 };

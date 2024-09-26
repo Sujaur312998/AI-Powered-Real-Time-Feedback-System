@@ -62,13 +62,13 @@ const Navbar = () => {
         <nav className="bg-white w-full border-b border-gray-200 shadow-sm">
             <div className="max-w-screen-2xl  mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center h-16">
-                    <div className="flex items-center">
+                    <div className="flex items-center ">
                         <Link to="/" className="text-2xl font-semibold text-gray-800">
                             AI Feedback App
                         </Link>
                     </div>
 
-                    <div className="hidden md:flex space-x-8">
+                    <div className="hidden md:flex space-x-8 mr-40 ">
                         {role && (
                             navData
                                 .filter(item => {
