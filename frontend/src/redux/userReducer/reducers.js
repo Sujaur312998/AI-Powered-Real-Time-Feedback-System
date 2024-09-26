@@ -2,7 +2,9 @@ import * as actionType from './type'
 
 const initialState = {
   userRole: '',
-  userID: ''
+  userID: '',
+  fullName: '',
+  email: '',
 };
 
 const rootReducer = (state = initialState, action) => {

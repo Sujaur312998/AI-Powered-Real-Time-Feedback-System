@@ -4,6 +4,7 @@ import axios from 'axios';
 import { host } from '../../../host';
 import Loader from '../../Loader';
 import { useSelector } from 'react-redux';
+import io from "socket.io-client";
 
 const ProductDetails = () => {
   const { email, fullName, userID, userRole } = useSelector((state) => state);
@@ -16,6 +17,10 @@ const ProductDetails = () => {
   const [orderSubmitted, setOrderSubmitted] = useState(false);
   const [orderDetails, setOrderDetails] = useState({});
 
+  var socket
+  const ENDPOINT = host;
+  socket = io(ENDPOINT);
+
   useEffect(() => {
     if (o_id) {
       setOrderSubmitted(true)
@@ -24,8 +29,6 @@ const ProductDetails = () => {
         params: { o_id: o_id }
       })
         .then(res => {
-          console.log(res.data.message);
-          
           setFeedback(res.data.message.feedback);
         })
         .catch(err => {
@@ -75,6 +78,11 @@ const ProductDetails = () => {
         data.review = res.data.result
         axios.put(`${host}/api/order/updateOrder`, data)
           .then(res => {
+            const data={
+              _id:res.data.message._id,
+              review:res.data.message.review
+            }
+            socket.emit("editCustomerFeedback",data);
             setOrderDetails(res.data.message);
             setFeedbackSubmitted(true);
             setShowFeedbackForm(false);

@@ -5,6 +5,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { userRole } from '../redux/userReducer/actions';
 import axios from 'axios';
 import { host } from '../host';
+import io from "socket.io-client";
+
 
 const navData = [
     {
@@ -30,8 +32,17 @@ const navData = [
 const Navbar = () => {
     const [isNavOpen, setIsNavOpen] = useState(false); // State for controlling nav visibility
     const role = useSelector((state) => state.userRole);
+    const userID = useSelector((state) => state.userID);
     const dispatch = useDispatch();
     const { user } = useUser();
+
+    var socket
+    const ENDPOINT = host;
+    
+    //socket
+    socket = io(ENDPOINT);
+    socket.emit("addUser",userID);
+    // socket.on("getUsers", (users) => console.log(users));
 
     useEffect(() => {
         if (!!user?.id) {
