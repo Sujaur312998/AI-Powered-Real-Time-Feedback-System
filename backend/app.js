@@ -13,7 +13,7 @@ const geminiRouter = require('./src/router/geminiRouter')
 
 require('dotenv').config()
 //mongodb Database
-require('./src/db/connectMongoose')
+require('./src/DB/connectMongoose')
 
 app.use(cors())
 app.use(express.json())
