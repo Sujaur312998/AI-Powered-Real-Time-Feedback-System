@@ -1,6 +1,6 @@
 import { useRoutes } from 'react-router-dom';
-import NotFoundPage from './components/NotFoundPage'
-import Customer from './components/adminComponent/Customer'
+import NotFoundPage from './components/NotFoundPage';
+import Customer from './components/adminComponent/Customer';
 import Navbar from './components/NavBar/';
 import Home from './components/Home/';
 import Product from './components/adminComponent/customerComponent/Product';
