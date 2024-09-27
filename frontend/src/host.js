@@ -1,1 +1,1 @@
-export const host= 'http://localhost:5500'
+export const host= 'https://ai-powered-real-time-feedback-system.onrender.com/'
