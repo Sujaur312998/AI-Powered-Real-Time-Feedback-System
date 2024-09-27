@@ -61,14 +61,25 @@ const editReview = (reviewObj) => {
     }
 }
 
-const io = require("socket.io")(server, {
-    pingTimeout: 60000,
-    cors: {
-        origin: "http://localhost:5173",
-        credentials: true,
-        optionsSuccessStatus: 200,
-    },
-});
+const allowedOrigins = [
+    "https://ai-feedback.onrender.com",
+    "http://localhost:5173"
+  ];
+  
+  const io = require("socket.io")(server, {
+      pingTimeout: 60000,
+      cors: {
+          origin: (origin, callback) => {
+              if (allowedOrigins.includes(origin)) {
+                  callback(null, true); 
+              } else {
+                  callback(new Error("Origin not allowed by CORS")); 
+              }
+          },
+          credentials: true,
+          optionsSuccessStatus: 200,
+      },
+  });
 
 
 io.on("connection", (socket) => {
