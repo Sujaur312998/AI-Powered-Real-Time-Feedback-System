@@ -19,6 +19,7 @@ const countReviews = (data) => {
 
 
 const ReviewCharts = () => {
+
     const [reviewsData, setReviewsData] = useState([])
     const reviewCounts = countReviews(reviewsData);
     const labels = Object.keys(reviewCounts);
@@ -28,7 +29,8 @@ const ReviewCharts = () => {
     const ENDPOINT = host;
     socket = io(ENDPOINT);
     socket.on("getCustomerFeedbback", (reviews) => {
-        setReviewsData(reviews)});
+        setReviewsData(reviews)
+    });
 
     useEffect(() => {
         axios.get(`${host}/api/order/getFeedback`)
@@ -66,6 +68,7 @@ const ReviewCharts = () => {
         <div style={{ width: '100%', height: '400px' }}>
             <h2 className='flex items-center justify-center font-semibold p-5'>Customer Feedback</h2>
             <Doughnut data={data} options={chartOptions} height={400} width={600} />
+
         </div>
     );
 };

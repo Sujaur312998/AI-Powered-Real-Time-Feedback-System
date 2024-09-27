@@ -2,14 +2,18 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { host } from '../../host'
 import { useSelector } from 'react-redux';
+import Loader from '../Loader';
 
 const Customer = () => {
     const [customer, setCustomer] = useState([])
+    const [loading, setLoading] = useState(false)
     const {userRole,userID} = useSelector((state) => state);
 
     useEffect(() => {
+        setLoading(true)
         axios.get(`${host}/api/user/getalluser`)
             .then(response => {
+                setLoading(false)
                 setCustomer(response.data.data);
             })
             .catch(error => {
@@ -37,6 +41,7 @@ const Customer = () => {
         }
         return
     };
+    if(loading) return <Loader />
 
     return (
         <div className="min-h-screen px-5 py-8 bg-gray-50">

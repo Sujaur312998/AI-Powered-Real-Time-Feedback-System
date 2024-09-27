@@ -10,6 +10,10 @@ import io from "socket.io-client";
 
 const navData = [
     {
+        href: '/analysis',
+        title: "Dashboard",
+    },
+    {
         href: '/customer',
         title: "Customers",
     },
@@ -17,10 +21,6 @@ const navData = [
         href: '/products',
         title: "Products",
         isCustomer: true
-    },
-    {
-        href: '/analysis',
-        title: "Analysis",
     },
     {
         href: '/order',

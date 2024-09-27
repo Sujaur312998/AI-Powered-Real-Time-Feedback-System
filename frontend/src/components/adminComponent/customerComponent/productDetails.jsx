@@ -47,21 +47,25 @@ const ProductDetails = () => {
 
       })
       .catch(error => {
+        setLoading(false)
         console.log(error);
         setLoading(false);
       });
   }, [p_id]);
 
   const handleOrderClick = () => {
+    setLoading(true)
     axios.post(`${host}/api/order/addOrder`, {
       userID: userID,
       productId: p_id
     }).then(res => {
       // console.log(res.data.message);
+      setLoading(false)
       setOrderDetails(res.data.message);
       setOrderSubmitted(true)
       setShowFeedbackForm(true);
     }).catch(error => {
+      setLoading(false)
       console.log(error);
     })
   };
@@ -73,11 +77,13 @@ const ProductDetails = () => {
       orderId: o_id || orderDetails._id,
       prompt: `${feedback}. `
     }
+    setLoading(true)
     axios.post(`${host}/api/gemini`, { prompt: data.prompt })
       .then(res => {
         data.review = res.data.result
         axios.put(`${host}/api/order/updateOrder`, data)
           .then(res => {
+            setLoading(false)
             const data={
               _id:res.data.message._id,
               review:res.data.message.review
@@ -89,6 +95,7 @@ const ProductDetails = () => {
           })
       })
       .catch(error => {
+        setLoading(false)
         console.log(error);
       })
 

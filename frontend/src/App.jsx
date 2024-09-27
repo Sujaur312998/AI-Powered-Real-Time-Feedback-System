@@ -1,12 +1,12 @@
 import { useRoutes } from 'react-router-dom';
 import NotFoundPage from './components/NotFoundPage';
-import Customer from './components/adminComponent/Customer'
-import Navbar from './components/NavBar';
-import Home from './components/Home/';
+import Home from './components/Home';
 import Product from './components/adminComponent/customerComponent/Product';
 import ProductDetails from './components/adminComponent/customerComponent/productDetails'
 import Order from './components/adminComponent/customerComponent/Order';
 import Analysis from './components/adminComponent/analysis';
+import Customer from './components/adminComponent/Customer';
+import Navbar from './components/NavBar';
 
 export default function App() {
   const routes = [
