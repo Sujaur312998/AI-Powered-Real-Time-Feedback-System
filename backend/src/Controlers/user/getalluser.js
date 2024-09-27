@@ -3,7 +3,7 @@ const USER = require('../../models/user_model');
 exports.getAllUsers = async (req, res) => {
     try {
         // Fetch all users from the database
-        const users = await USER.find();
+        const users = await USER.find({role:"customer"});
 
         // If no users are found, return a 404 response
         if (!users || users.length === 0) {
