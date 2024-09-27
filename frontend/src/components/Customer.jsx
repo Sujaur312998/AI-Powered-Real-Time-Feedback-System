@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import { host } from '../../host'
+import { host } from '../host'
 import { useSelector } from 'react-redux';
-import Loader from '../Loader';
+import Loader from './Loader';
 
 const Customer = () => {
     const [customer, setCustomer] = useState([])
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
     const {userRole,userID} = useSelector((state) => state);
 
     useEffect(() => {
-        setLoading(true)
         axios.get(`${host}/api/user/getalluser`)
             .then(response => {
                 setLoading(false)
                 setCustomer(response.data.data);
             })
             .catch(error => {
+                setLoading(false)
                 console.log(error);
 
             })
@@ -32,9 +32,11 @@ const Customer = () => {
         if (userRole === 'admin') {
             axios.put(`${host}/api/user/updateRole`, { id, role })
                 .then(res => {
+                    setLoading(false)
                     handleCustomerList(res.data.updatedUser, index);
                 })
                 .catch(error => {
+                    setLoading(false)
                     console.error('Error updating role:', error.response?.data || error.message);
                     alert('Failed to update user role');
                 });

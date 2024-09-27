@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Doughnut } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, ArcElement, Title, Tooltip, Legend } from 'chart.js';
-import { host } from '../../host'
+import { host } from '../host'
 import axios from 'axios'
 import io from "socket.io-client";
 

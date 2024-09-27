@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
-import { host } from '../../../host';
+import { host } from '../host';
 import ProductForm from './ProductForm';
 import ProductList from './ProductList';
-import Loader from '../../Loader';
+import Loader from './Loader';
 
 const Product = () => {
   const [loading, setLoading] = useState(true)

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
-import { host } from '../../../host';
-import Loader from '../../Loader';
+import { host } from '../host';
+import Loader from './Loader';
 import { useNavigate } from "react-router-dom";
 
 const Order = () => {

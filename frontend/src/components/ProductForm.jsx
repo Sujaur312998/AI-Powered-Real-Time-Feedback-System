@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { host } from '../../../host';
+import { host } from '../host';
 
 const ProductForm = ({ userRole, userID, setProductList }) => {
   const [productName, setProductName] = useState('');

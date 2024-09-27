@@ -1,11 +1,11 @@
 import { useRoutes } from 'react-router-dom';
 import NotFoundPage from './components/NotFoundPage';
 import Home from './components/Home';
-import Product from './components/adminComponent/customerComponent/Product';
-import ProductDetails from './components/adminComponent/customerComponent/productDetails'
-import Order from './components/adminComponent/customerComponent/Order';
-import Analysis from './components/adminComponent/analysis';
-import Customer from './components/adminComponent/Customer';
+import Product from './components/Product';
+import ProductDetails from './components/productDetails';
+import Order from './components/Order';
+import ReviewCharts from './components/Analysis';
+import Customer from './components/Customer';
 import Navbar from './components/NavBar';
 
 export default function App() {
@@ -15,7 +15,7 @@ export default function App() {
     { path: '/products', element: <Product /> },
     { path: '/productdetails/:p_id', element: <ProductDetails /> },
     { path: '/productdetails/:p_id/:o_id', element: <ProductDetails /> },
-    { path: '/analysis', element: <Analysis /> },
+    { path: '/analysis', element: <ReviewCharts /> },
     { path: '/order', element: <Order /> },
     { path: '*', element: <NotFoundPage /> },
   ];
